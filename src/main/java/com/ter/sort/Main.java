@@ -36,6 +36,14 @@ public class Main {
         writeResult(config.outputFile, sorted);
     }
 
+    /**
+     * Разбор параметров и создание конфига запуска
+     *
+     * @param args список переданных параметров
+     * @return  конфиг запуска
+     * @throws FilesNotFoundException если не указан выходной или входные файлы
+     * @throws FlagNotFoundException если не указан ни одни из флагов отвечающих за тип данных в файлах
+     */
     private static Config parsArgs(String[] args) throws FilesNotFoundException, FlagNotFoundException {
         Type type = null;
         Direction direction = Direction.ASC;
@@ -74,6 +82,12 @@ public class Main {
         return new Config(type, direction, files.subList(1, files.size()), files.get(0));
     }
 
+    /**
+     * Чтение файла
+     *
+     * @param file файл(объект файла)
+     * @return список строк из файла
+     */
     public static List<String> readFile(File file) {
         List<String> result = List.of();
         try {
@@ -84,6 +98,12 @@ public class Main {
         return result;
     }
 
+    /**
+     * Перевод строки в число
+     *
+     * @param s строка
+     * @return Optional.empty если преобразование не удалось, Optional.value в случае успеха
+     */
     public static Optional<Integer> toInteger(String s) {
         try {
             return Optional.of(Integer.valueOf(s));
@@ -92,6 +112,12 @@ public class Main {
         }
     }
 
+    /**
+     * Сортировка строковых элементов списка алгоритмом "сортировка слиянием"
+     * @param elements список сортируемых элементов
+     * @param direction параметр сортировки
+     * @return список отсортированных элементов
+     */
     private static List<String> sortString(List<String> elements, Direction direction) {
         Comparator<String> comparator = String::compareTo;
         if (direction == Direction.ASC) {
@@ -101,6 +127,12 @@ public class Main {
         }
     }
 
+    /**
+     * Сортировка целочисленных элементов списка алгоритмом "сортировка слиянием"
+     * @param elements список сортируемых элементов
+     * @param direction параметр сортировки
+     * @return список отсортированных элементов
+     */
     private static List<Integer> sortInt(List<Integer> elements, Direction direction) {
         Comparator<Integer> comparator = Integer::compareTo;
         if (direction == Direction.ASC) {
@@ -109,7 +141,12 @@ public class Main {
             return sort(elements, comparator.reversed());
         }
     }
-
+    /**
+     * Сортировка элементов списка алгоритмом "сортировка слиянием"
+     * @param elements список сортируемых элементов
+     * @param comparator компаратор для сравнения двух элементов
+     * @return отсортированный список
+     */
     private static <T> List<T> sort(List<T> elements, Comparator<T> comparator) {
 
         if (elements.size() == 1) return elements;
@@ -120,6 +157,14 @@ public class Main {
         return merge(left, right, comparator);
     }
 
+    /**
+     * Получение отсортированного массива из элементов двух отсортированных массивов
+     * @param a1 отсортированный массив элементов
+     * @param a2 отсортированный массив элементов
+     * @param comparator компаратор для сравнения двух элементов
+     * @param <T> тип элемента массива
+     * @return массив отсортированный порядком заданном comparator из элементов двух входных массивов
+     */
     private static <T> List<T> merge(List<T> a1, List<T> a2, Comparator<T> comparator) {
         int resultLength = a1.size() + a2.size();
         List<T> result = new ArrayList<>(resultLength);
@@ -146,6 +191,13 @@ public class Main {
 
     }
 
+    /**
+     * Запись массива в файл
+     *
+     * @param outFile путь к файлу в который будет идти запись массива
+     * @param result  отсортированный массив из входных файлов
+     * @param <T>  тип элемента массива
+     */
     private static <T> void writeResult(String outFile, List<? extends Object> result) {
         File file = new File(outFile);
 
@@ -160,6 +212,5 @@ public class Main {
             System.out.printf("Could not create or write output file. Reason: %s", e.getMessage());
         }
     }
-
 
 }
